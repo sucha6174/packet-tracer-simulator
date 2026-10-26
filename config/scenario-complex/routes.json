@@ -1,0 +1,32 @@
+[
+  {
+    "destination_cidr": "10.0.0.0/8",
+    "next_hop": "10.0.0.1",
+    "interface": "eth-backbone"
+  },
+  {
+    "destination_cidr": "10.1.0.0/16",
+    "next_hop": "10.1.0.1",
+    "interface": "eth-regional"
+  },
+  {
+    "destination_cidr": "10.1.2.0/24",
+    "next_hop": "10.1.2.1",
+    "interface": "eth-lan"
+  },
+  {
+    "destination_cidr": "10.1.2.50/32",
+    "next_hop": "10.1.2.50",
+    "interface": "eth-host-direct"
+  },
+  {
+    "destination_cidr": "172.16.0.0/16",
+    "next_hop": "172.16.0.1",
+    "interface": "eth-dmz"
+  },
+  {
+    "destination_cidr": "172.16.20.0/24",
+    "next_hop": "172.16.20.1",
+    "interface": "eth-dmz-app"
+  }
+]

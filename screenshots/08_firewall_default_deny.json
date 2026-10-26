@@ -1,0 +1,31 @@
+{
+  "title": "Test Case 8: Firewall Default-Deny Policy",
+  "description": "Unmatched destination port 9999 denied by implicit default-deny security policy.",
+  "scenario": "scenario-basic",
+  "input": {
+    "source_ip": "192.168.1.100",
+    "destination": "api.example.com",
+    "destination_port": 9999,
+    "protocol": "TCP",
+    "initial_ttl": 5
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 4"
+      },
+      {
+        "step": 3,
+        "component": "Firewall",
+        "action": "Packet denied by default policy. No matching rules."
+      }
+    ]
+  }
+}

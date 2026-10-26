@@ -1,0 +1,51 @@
+[
+  {
+    "rule_id": 1,
+    "action": "deny",
+    "source_cidr": "0.0.0.0/0",
+    "destination_port": 69,
+    "protocol": "UDP"
+  },
+  {
+    "rule_id": 2,
+    "action": "deny",
+    "source_cidr": "10.200.0.0/16",
+    "destination_port": 22,
+    "protocol": "TCP"
+  },
+  {
+    "rule_id": 3,
+    "action": "allow",
+    "source_cidr": "10.100.0.0/24",
+    "destination_port": 22,
+    "protocol": "TCP"
+  },
+  {
+    "rule_id": 4,
+    "action": "allow",
+    "source_cidr": "10.0.0.0/8",
+    "destination_port": 443,
+    "protocol": "TCP"
+  },
+  {
+    "rule_id": 5,
+    "action": "allow",
+    "source_cidr": "10.100.0.50/32",
+    "destination_port": "*",
+    "protocol": "*"
+  },
+  {
+    "rule_id": 6,
+    "action": "deny",
+    "source_cidr": "0.0.0.0/0",
+    "destination_port": 22,
+    "protocol": "TCP"
+  },
+  {
+    "rule_id": 7,
+    "action": "allow",
+    "source_cidr": "10.0.0.0/8",
+    "destination_port": 80,
+    "protocol": "TCP"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "api.corp.net": {
+    "type": "A",
+    "value": "10.1.2.50"
+  },
+  "origin.corp.net": {
+    "type": "A",
+    "value": "172.16.20.100"
+  },
+  "app.corp.net": {
+    "type": "CNAME",
+    "value": "origin.corp.net"
+  },
+  "portal.corp.net": {
+    "type": "CNAME",
+    "value": "app.corp.net"
+  },
+  "status.corp.net": {
+    "type": "A",
+    "value": "10.1.3.10"
+  },
+  "legacy.corp.net": {
+    "type": "A",
+    "value": "192.168.99.99"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "title": "Test Case 1: Successful Packet Tracing (Happy Path)",
+  "description": "Packet with valid hostname, sufficient TTL, matching route, and allowed firewall rule.",
+  "scenario": "scenario-basic",
+  "input": {
+    "source_ip": "192.168.1.100",
+    "destination": "api.example.com",
+    "destination_port": 443,
+    "protocol": "TCP",
+    "initial_ttl": 5
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 4"
+      },
+      {
+        "step": 3,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 3 (source: 192.168.1.0/24, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 4,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 192.168.1.1 via interface eth1"
+      }
+    ]
+  }
+}

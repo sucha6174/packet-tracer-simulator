@@ -1,0 +1,46 @@
+{
+  "title": "Test Case 7: Multi-Level CNAME Chain Resolution",
+  "description": "portal.corp.net -> app.corp.net -> origin.corp.net -> 172.16.20.100.",
+  "scenario": "scenario-complex",
+  "input": {
+    "source_ip": "10.100.0.50",
+    "destination": "portal.corp.net",
+    "destination_port": 443,
+    "protocol": "TCP",
+    "initial_ttl": 10
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "CNAME lookup: portal.corp.net is an alias for app.corp.net"
+      },
+      {
+        "step": 2,
+        "component": "DNS",
+        "action": "CNAME lookup: app.corp.net is an alias for origin.corp.net"
+      },
+      {
+        "step": 3,
+        "component": "DNS",
+        "action": "Resolved portal.corp.net (via origin.corp.net) to 172.16.20.100"
+      },
+      {
+        "step": 4,
+        "component": "Router",
+        "action": "Route matched: 172.16.20.0/24 via 172.16.20.1 on eth-dmz-app (prefix /24). Decremented TTL to 9"
+      },
+      {
+        "step": 5,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 4 (source: 10.0.0.0/8, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 6,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 172.16.20.1 via interface eth-dmz-app"
+      }
+    ]
+  }
+}

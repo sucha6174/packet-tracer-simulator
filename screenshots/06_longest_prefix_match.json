@@ -1,0 +1,31 @@
+{
+  "title": "Test Case 6: Longest Prefix Match (LPM) Specificity",
+  "description": "IP 10.1.2.50 matches /32 host route over /24, /16, and /8 overlapping routes.",
+  "scenario": "scenario-complex",
+  "input": {
+    "source_ip": "10.100.0.50",
+    "destination": "10.1.2.50",
+    "destination_port": 443,
+    "protocol": "TCP",
+    "initial_ttl": 8
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "Router",
+        "action": "Route matched: 10.1.2.50/32 via 10.1.2.50 on eth-host-direct (prefix /32). Decremented TTL to 7"
+      },
+      {
+        "step": 2,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 4 (source: 10.0.0.0/8, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 3,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 10.1.2.50 via interface eth-host-direct"
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "packet-tracer-simulator",
+  "version": "1.0.0",
+  "description": "API-Driven Virtual Network Simulator for Packet Tracing",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/**/*.test.js",
+    "test:unit": "node --test tests/unit/**/*.test.js",
+    "test:integration": "node --test tests/integration/**/*.test.js",
+    "demo": "node scripts/demonstrate.js"
+  },
+  "keywords": [
+    "network",
+    "packet-tracer",
+    "simulator",
+    "dns",
+    "routing",
+    "longest-prefix-match",
+    "firewall",
+    "ttl"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

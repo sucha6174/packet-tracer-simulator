@@ -1,0 +1,234 @@
+[
+  {
+    "id": "01_happy_path_success",
+    "title": "Test Case 1: Successful Packet Tracing (Happy Path)",
+    "scenario": "scenario-basic",
+    "input": {
+      "source_ip": "192.168.1.100",
+      "destination": "api.example.com",
+      "destination_port": 443,
+      "protocol": "TCP",
+      "initial_ttl": 5
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 4"
+      },
+      {
+        "step": 3,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 3 (source: 192.168.1.0/24, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 4,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 192.168.1.1 via interface eth1"
+      }
+    ]
+  },
+  {
+    "id": "02_dns_failure_nxdomain",
+    "title": "Test Case 2: DNS Failure (NXDOMAIN)",
+    "scenario": "scenario-basic",
+    "input": {
+      "source_ip": "192.168.1.100",
+      "destination": "nonexistent-host.example.com",
+      "destination_port": 80,
+      "protocol": "TCP",
+      "initial_ttl": 5
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "NXDOMAIN: Domain 'nonexistent-host.example.com' not found"
+      }
+    ]
+  },
+  {
+    "id": "03_routing_failure_no_route",
+    "title": "Test Case 3: Routing Failure (No Route to Host)",
+    "scenario": "scenario-complex",
+    "input": {
+      "source_ip": "10.0.0.1",
+      "destination": "192.0.2.1",
+      "destination_port": 80,
+      "protocol": "TCP",
+      "initial_ttl": 5
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "Router",
+        "action": "No route to host: destination 192.0.2.1 does not match any configured route"
+      }
+    ]
+  },
+  {
+    "id": "04_ttl_expiration",
+    "title": "Test Case 4: TTL Expiration Boundary",
+    "scenario": "scenario-basic",
+    "input": {
+      "source_ip": "192.168.1.100",
+      "destination": "api.example.com",
+      "destination_port": 443,
+      "protocol": "TCP",
+      "initial_ttl": 1
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 0"
+      },
+      {
+        "step": 3,
+        "component": "Router",
+        "action": "Time to Live exceeded. Packet dropped."
+      }
+    ]
+  },
+  {
+    "id": "05_firewall_denial",
+    "title": "Test Case 5: Firewall Explicit Denial",
+    "scenario": "scenario-basic",
+    "input": {
+      "source_ip": "192.168.1.100",
+      "destination": "api.example.com",
+      "destination_port": 22,
+      "protocol": "TCP",
+      "initial_ttl": 5
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 4"
+      },
+      {
+        "step": 3,
+        "component": "Firewall",
+        "action": "Packet denied by rule 1 (source: 0.0.0.0/0, port: 22, protocol: TCP)"
+      }
+    ]
+  },
+  {
+    "id": "06_longest_prefix_match",
+    "title": "Test Case 6: Longest Prefix Match (LPM) Specificity",
+    "scenario": "scenario-complex",
+    "input": {
+      "source_ip": "10.100.0.50",
+      "destination": "10.1.2.50",
+      "destination_port": 443,
+      "protocol": "TCP",
+      "initial_ttl": 8
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "Router",
+        "action": "Route matched: 10.1.2.50/32 via 10.1.2.50 on eth-host-direct (prefix /32). Decremented TTL to 7"
+      },
+      {
+        "step": 2,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 4 (source: 10.0.0.0/8, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 3,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 10.1.2.50 via interface eth-host-direct"
+      }
+    ]
+  },
+  {
+    "id": "07_multi_level_cname",
+    "title": "Test Case 7: Multi-Level CNAME Chain Resolution",
+    "scenario": "scenario-complex",
+    "input": {
+      "source_ip": "10.100.0.50",
+      "destination": "portal.corp.net",
+      "destination_port": 443,
+      "protocol": "TCP",
+      "initial_ttl": 10
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "CNAME lookup: portal.corp.net is an alias for app.corp.net"
+      },
+      {
+        "step": 2,
+        "component": "DNS",
+        "action": "CNAME lookup: app.corp.net is an alias for origin.corp.net"
+      },
+      {
+        "step": 3,
+        "component": "DNS",
+        "action": "Resolved portal.corp.net (via origin.corp.net) to 172.16.20.100"
+      },
+      {
+        "step": 4,
+        "component": "Router",
+        "action": "Route matched: 172.16.20.0/24 via 172.16.20.1 on eth-dmz-app (prefix /24). Decremented TTL to 9"
+      },
+      {
+        "step": 5,
+        "component": "Firewall",
+        "action": "Packet allowed by rule 4 (source: 10.0.0.0/8, port: 443, protocol: TCP)"
+      },
+      {
+        "step": 6,
+        "component": "Router",
+        "action": "Packet forwarded to next hop 172.16.20.1 via interface eth-dmz-app"
+      }
+    ]
+  },
+  {
+    "id": "08_firewall_default_deny",
+    "title": "Test Case 8: Firewall Default-Deny Policy",
+    "scenario": "scenario-basic",
+    "input": {
+      "source_ip": "192.168.1.100",
+      "destination": "api.example.com",
+      "destination_port": 9999,
+      "protocol": "TCP",
+      "initial_ttl": 5
+    },
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "Resolved api.example.com to 10.0.1.50"
+      },
+      {
+        "step": 2,
+        "component": "Router",
+        "action": "Route matched: 10.0.1.0/24 via 192.168.1.1 on eth1 (prefix /24). Decremented TTL to 4"
+      },
+      {
+        "step": 3,
+        "component": "Firewall",
+        "action": "Packet denied by default policy. No matching rules."
+      }
+    ]
+  }
+]

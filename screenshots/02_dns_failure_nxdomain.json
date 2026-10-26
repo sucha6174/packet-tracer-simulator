@@ -1,0 +1,21 @@
+{
+  "title": "Test Case 2: DNS Failure (NXDOMAIN)",
+  "description": "Packet with unresolvable domain terminates immediately at DNS resolver.",
+  "scenario": "scenario-basic",
+  "input": {
+    "source_ip": "192.168.1.100",
+    "destination": "nonexistent-host.example.com",
+    "destination_port": 80,
+    "protocol": "TCP",
+    "initial_ttl": 5
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "DNS",
+        "action": "NXDOMAIN: Domain 'nonexistent-host.example.com' not found"
+      }
+    ]
+  }
+}

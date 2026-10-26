@@ -1,0 +1,21 @@
+{
+  "title": "Test Case 3: Routing Failure (No Route to Host)",
+  "description": "Destination IP with no matching CIDR block in routing table terminates trace.",
+  "scenario": "scenario-complex",
+  "input": {
+    "source_ip": "10.0.0.1",
+    "destination": "192.0.2.1",
+    "destination_port": 80,
+    "protocol": "TCP",
+    "initial_ttl": 5
+  },
+  "output": {
+    "trace": [
+      {
+        "step": 1,
+        "component": "Router",
+        "action": "No route to host: destination 192.0.2.1 does not match any configured route"
+      }
+    ]
+  }
+}

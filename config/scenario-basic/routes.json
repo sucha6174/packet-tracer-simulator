@@ -1,0 +1,17 @@
+[
+  {
+    "destination_cidr": "10.0.1.0/24",
+    "next_hop": "192.168.1.1",
+    "interface": "eth1"
+  },
+  {
+    "destination_cidr": "192.168.10.0/24",
+    "next_hop": "192.168.1.10",
+    "interface": "eth2"
+  },
+  {
+    "destination_cidr": "0.0.0.0/0",
+    "next_hop": "192.168.1.254",
+    "interface": "eth0"
+  }
+]

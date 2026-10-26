@@ -1,0 +1,18 @@
+{
+  "api.example.com": {
+    "type": "A",
+    "value": "10.0.1.50"
+  },
+  "web.example.com": {
+    "type": "A",
+    "value": "10.0.1.80"
+  },
+  "www.example.com": {
+    "type": "CNAME",
+    "value": "web.example.com"
+  },
+  "db.internal": {
+    "type": "A",
+    "value": "192.168.10.5"
+  }
+}

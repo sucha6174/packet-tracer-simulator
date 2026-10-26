@@ -1,0 +1,21 @@
+services:
+  simulator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: packet-tracer-simulator
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - CONFIG_PATH=${CONFIG_PATH:-config/scenario-basic}
+    volumes:
+      - ./config:/app/config:ro
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1:8080/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
